@@ -5,6 +5,7 @@ Projeto de estudos fullstack com TypeScript.
 ## 🚀 Tecnologias
 
 ### Backend (API)
+
 - **Fastify** - Framework web
 - **TypeScript** - Linguagem principal
 - **Prisma** - ORM para banco de dados
@@ -12,6 +13,7 @@ Projeto de estudos fullstack com TypeScript.
 - **Vitest** - Testes
 
 ### Frontend (Web)
+
 - **React 19** - Biblioteca UI
 - **TypeScript** - Linguagem principal
 - **Vite** - Build tool
@@ -47,12 +49,14 @@ npm run dev
 ## 📝 Scripts úteis
 
 ### Backend
+
 - `npm run dev` - Desenvolvimento
 - `npm run build` - Build para produção
 - `npm run test` - Executar testes
 - `npm run prisma:studio` - Abrir Prisma Studio
 
 ### Frontend
+
 - `npm run dev` - Desenvolvimento
 - `npm run build` - Build para produção
 - `npm run preview` - Preview da build 
