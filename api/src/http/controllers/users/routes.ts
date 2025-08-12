@@ -2,6 +2,7 @@ import { z } from "zod";
 import type { FastifyTypedInstance } from "@/@types/fastify-typed-instance";
 import { register } from "@/http/controllers/users/register";
 import { update } from "@/http/controllers/users/update";
+import { deleteUser } from "./delete";
 
 export async function userRoutes(app: FastifyTypedInstance) {
   app.post(
@@ -69,4 +70,22 @@ export async function userRoutes(app: FastifyTypedInstance) {
     },
     update,
   );
+
+  app.delete(
+    "/users/:id",
+    {
+      schema: {
+        description: "Delete a user",
+        tags: ["users"],
+        response: {
+          204: z.null().describe("User deleted successfully"),
+          404: z.object({
+            message: z.string().default("User not exists"),
+          }).describe("User not exists"),
+        },
+      },
+    },
+    deleteUser,
+  );
+
 }
