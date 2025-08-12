@@ -9,5 +9,11 @@ app
     port,
   })
   .then(() => {
-    console.log(`✏️ HTTP Server Running on port: ${port}!`)
+    console.log(`
+      ✏️  HTTP Server Running on port: ${port}!
+      
+      See the docs on:
+      http://localhost:${port}/docs
+      http://localhost:${port}/reference
+      `)
   })
