@@ -2,6 +2,8 @@ import type { FastifyReply, FastifyRequest } from "fastify";
 import { z } from "zod";
 import { UserAlreadyExistError } from "@/use-cases/errors/user-already-exist-error";
 import { makeRegisterUseCase } from "@/use-cases/factories/make-register-use-case";
+import { UserWithSameCpfError } from "@/use-cases/errors/user-with-same-cpf-error";
+import { UserWithSameEmailError } from "@/use-cases/errors/user-with-same-email-error";
 
 export async function register(request: FastifyRequest, reply: FastifyReply) {
 
@@ -32,9 +34,14 @@ export async function register(request: FastifyRequest, reply: FastifyReply) {
       cpf,
     });
   } catch (error) {
-    if (error instanceof UserAlreadyExistError) {
+    if (
+      error instanceof UserAlreadyExistError
+      || error instanceof UserWithSameCpfError
+      || error instanceof UserWithSameEmailError
+    ) {
       return reply.status(409).send({ message: error.message });
     }
+
     throw error;
   }
 

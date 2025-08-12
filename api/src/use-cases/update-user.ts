@@ -1,6 +1,9 @@
 import type { User } from "generated/prisma";
 import type { UserRepository } from "@/repositories/user-repository";
 import { UserNotExistError } from "./errors/user-not-exist-error";
+import { hash } from "bcryptjs";
+import { UserWithSameEmailError } from "./errors/user-with-same-email-error";
+import { UserWithSameCpfError } from "./errors/user-with-same-cpf-error";
 
 interface UpdateUserUseCaseRequest {
   id?: string;
@@ -33,13 +36,35 @@ export class UpdateUserUseCase {
       throw new UserNotExistError();
     }
 
+    const userWithSameEmail = await this.userRepository.searchOneByParams({
+      where: { email },
+    });
+
+    if (userWithSameEmail && userWithSameEmail.id !== id) {
+      throw new UserWithSameEmailError();
+    }
+
+    const userWithSameCpf = await this.userRepository.searchOneByParams({
+      where: { cpf },
+    });
+
+    if (userWithSameCpf && userWithSameCpf.id !== id) {
+      throw new UserWithSameCpfError();
+    }
+
+    let hashedPassword: string | undefined;
+
+    if (password) {
+      hashedPassword = await hash(password, 8);
+    }
+
     const user = await this.userRepository.update({
       id,
       name,
       lastName,
       birthDate,
       email,
-      password,
+      password: hashedPassword,
       cpf,
     });
 

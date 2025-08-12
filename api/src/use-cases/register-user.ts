@@ -1,6 +1,8 @@
 import type { User } from "generated/prisma";
 import type { UserRepository } from "@/repositories/user-repository";
 import { UserAlreadyExistError } from "./errors/user-already-exist-error";
+import { hash } from "bcryptjs";
+import { UserWithSameCpfError } from "./errors/user-with-same-cpf-error";
 
 interface RegisterUserUseCaseRequest {
   name: string;
@@ -31,12 +33,22 @@ export class RegisterUserUseCase {
       throw new UserAlreadyExistError();
     }
 
+    const userWithSameCpf = await this.userRepository.searchOneByParams({
+      where: { cpf },
+    });
+
+    if (userWithSameCpf) {
+      throw new UserWithSameCpfError();
+    }
+
+    const hashedPassword = await hash(password, 8);
+
     const user = await this.userRepository.create({
       name,
       lastName,
       birthDate,
       email,
-      password,
+      password: hashedPassword,
       cpf,
     });
 
