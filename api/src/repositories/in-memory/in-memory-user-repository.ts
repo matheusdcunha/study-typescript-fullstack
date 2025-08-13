@@ -42,6 +42,9 @@ export class InMemoryUserRepository implements UserRepository {
   }
 
   async searchOneByParams(params: Prisma.UserFindFirstArgs): Promise<User | null> {
+
+
+
     const user = this.users.find((user) => {
 
       return Object.entries(params.where ?? {}).every(([key, value]) => {
